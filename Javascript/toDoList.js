@@ -52,6 +52,7 @@ window.onload = function(){
       var toDoElement = createToDoElement(toDoObject);
       appendToDoElement(toDoElement);
       setActiveCountText();
+      setClearCompletedBtn();
     }
   }
 
@@ -123,6 +124,7 @@ window.onload = function(){
     deleteToDoElement(targetToDoElement);
     deleteToDoObject(targetToDoElement);
     setActiveCountText();
+    setClearCompletedBtn();
   }
 
   //changeToDoStatus
@@ -143,6 +145,7 @@ window.onload = function(){
     var changedToDoObject = changeToDoObjectStatus(targetToDoElement);
     changeToDoElementStatus(targetToDoElement, changedToDoObject);
     setActiveCountText();
+    setClearCompletedBtn();
   }
 
   var showDeleteBtn = function() {
@@ -250,6 +253,7 @@ window.onload = function(){
     (toggleStatus === "status_toggle")? setAllStatus("completed") : setAllStatus("active");
     event.currentTarget.classList.toggle("status_toggle");
     setActiveCountText();
+    setClearCompletedBtn();
   }
 
   $("#toggle-all").on("click", toggleAll);
@@ -280,4 +284,11 @@ window.onload = function(){
   $("#completed").on("click", function(){
     drawToDoListByStatus("completed");
   });
+
+  //set ClearCompleted Button
+  var setClearCompletedBtn = function(){
+    var clearCompletedBtn = document.getElementById("clear_completed");
+    clearCompletedBtn.className = "clearCompletedBtn";
+    if(getActiveCount() < toDoArr.length) clearCompletedBtn.classList.toggle("clearCompletedBtn");
+  }
 }
