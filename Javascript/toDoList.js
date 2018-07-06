@@ -27,19 +27,23 @@ window.onload = function(){
 
   //add To Do
   var addNewToDo = function(event){
-    if(event.keyCode === 13){
-      var text = getInputText();
-      if(!text || text === "" || text === " ") return;
-      if(isToDoExist(text)) return;
-      var toDoObject = createToDoObject("active",text);
-      var toDoElement = createToDoElement(toDoObject);
-      appendToDoElement(toDoElement);
-      updateFooterInfo();
-    }
+    if(event.keyCode !== 13) return;
+    var text = getInputText();
+    if(!text) return;
+    addToDo(text);
+    updateFooterInfo();
+  }
+
+  var addToDo = function(text){
+    var toDoObject = createToDoObject("active",text);
+    var toDoElement = createToDoElement(toDoObject);
+    appendToDoElement(toDoElement);
   }
 
   var getInputText = function(){
     var inputText = document.getElementById('toDo_input').value;
+    if(inputText.replace(/^\s+/g, '').length === 0) return;
+    if(isToDoExist(inputText)) return;
     document.getElementById('toDo_input').value = "";
     return inputText;
   }
@@ -61,7 +65,7 @@ window.onload = function(){
     var toDoText = document.createElement("div");
     toDoText.className = (type === "completed")? "toDo_text completed" : "toDo_text";
     toDoText.innerText = text;
-    $(toDoText).dblclick(showEditBox);
+    $(toDoText).dblclick(editToDo);
     return toDoText;
   }
 
@@ -151,19 +155,28 @@ window.onload = function(){
     changeToDoElementStatus(targetToDoElement, changedToDoObject);
     updateFooterInfo();
   }
+
   var showDeleteBtn = function() {
-      $(this).children(".toDo_delete").toggleClass("hover");
+    $(this).children(".toDo_delete").toggleClass("hover");
   }
 
   //edit
-  var showEditBox = function(event){
+  var editToDo = function(event){
     var targetToDoElement = getTargetToDoElement(event);
     var toDoObject = getToDoObjectByElement(targetToDoElement);
-    replaceTextToInput(targetToDoElement);
-    offEvents(targetToDoElement);
+    startEdit(targetToDoElement);
+    endEdit(targetToDoElement,toDoObject);
+  }
+
+  var endEdit = function(toDoElement,toDoObject){
     $(".toDo_text > input").on("focusout", function(){
-      editToDoText(targetToDoElement,toDoObject);
+      editToDoText(toDoElement,toDoObject);
     });
+  }
+
+  var startEdit = function(toDoElement){
+    replaceTextToInput(toDoElement);
+    offEvents(toDoElement);
   }
 
   var editToDoText = function(toDoElement,toDoObject){
