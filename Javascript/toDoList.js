@@ -1,25 +1,7 @@
 window.onload = function(){
   var toDoArr = [];
 
-  var getInputText = function(){
-    var inputText = document.getElementById('toDo_input').value;
-    document.getElementById('toDo_input').value = "";
-    return inputText;
-  }
-
-  var createToDoObject = function(status, text){
-    var toDoObject = {
-      "status" : status,
-      "text" : text
-    };
-    toDoArr.push(toDoObject);
-    return toDoObject;
-  }
-
-  var appendToDoElement = function(toDoElement){
-    document.getElementById("toDoList").appendChild(toDoElement);
-  }
-
+  //object와 element의 관계
   var getToDoObjectIdxByText = function(text){
       for(var index in toDoArr){
         if(toDoArr[index].text === text) return index;
@@ -43,10 +25,7 @@ window.onload = function(){
     return false;
   }
 
-  var updateFooterInfo = function(){
-    setActiveCountText();
-    setClearCompletedBtn();
-  }
+  //add To Do
   var addNewToDo = function(event){
     if(event.keyCode === 13){
       var text = getInputText();
@@ -57,6 +36,25 @@ window.onload = function(){
       appendToDoElement(toDoElement);
       updateFooterInfo();
     }
+  }
+
+  var getInputText = function(){
+    var inputText = document.getElementById('toDo_input').value;
+    document.getElementById('toDo_input').value = "";
+    return inputText;
+  }
+
+  var createToDoObject = function(status, text){
+    var toDoObject = {
+      "status" : status,
+      "text" : text
+    };
+    toDoArr.push(toDoObject);
+    return toDoObject;
+  }
+
+  var appendToDoElement = function(toDoElement){
+    document.getElementById("toDoList").appendChild(toDoElement);
   }
 
   var createText = function(text, type){
@@ -96,6 +94,11 @@ window.onload = function(){
     toDoDiv.appendChild(createText(toDoObject.text,toDoObject.status));
     toDoDiv.appendChild(createButtonDiv("delete"));
     return toDoDiv;
+  }
+
+  var updateFooterInfo = function(){
+    setActiveCountText();
+    setClearCompletedBtn();
   }
 
   var inputBox = document.getElementById('toDo_input');
@@ -158,20 +161,17 @@ window.onload = function(){
     var toDoObject = getToDoObjectByElement(targetToDoElement);
     replaceTextToInput(targetToDoElement);
     offEvents(targetToDoElement);
-    $(".toDo_text > input").on("keypress", { toDoElement:targetToDoElement,
-    toDoObject : toDoObject },editToDoText);
+    $(".toDo_text > input").on("focusout", function(){
+      editToDoText(targetToDoElement,toDoObject);
+    });
   }
 
-  var editToDoText = function(event){
-    if(event.keyCode === 13){
-      var toDoElement = event.data.toDoElement;
-      var toDoObject = event.data.toDoObject;
-      var text = $(toDoElement).find("input").val();
-      if(isToDoExist(text)) return;
-      editToDoElementText(toDoElement,text);
-      toDoObject.text = text;
-      onEvents(toDoElement);
-    }
+  var editToDoText = function(toDoElement,toDoObject){
+    var text = $(toDoElement).find("input").val();
+    if(isToDoExist(text)) return;
+    editToDoElementText(toDoElement,text);
+    toDoObject.text = text;
+    onEvents(toDoElement);
   }
 
   var editToDoElementText = function(toDoElement, text){
@@ -238,11 +238,6 @@ window.onload = function(){
     drawAllToDoObjects();
   }
 
-  var drawToDoListByStatus = function(status){
-    removeAllToDoElement();
-    drawToDoObjectsByStatus(status);
-  }
-
   var setAllStatus = function(type){
     setAllObjectStatus(type);
     drawAllToDoList();
@@ -259,8 +254,7 @@ window.onload = function(){
 
   //set active count
   var setActiveCountText = function(){
-    var countText = getActiveCount() + " items left";
-    document.getElementById("count").innerText = countText;
+    document.getElementById("count").innerText = getActiveCount() + " items left";
   }
 
   var getActiveCount = function(){
@@ -271,15 +265,20 @@ window.onload = function(){
     return count;
   }
 
-  //denote all
+  //show all toDo
+  var drawToDoListByStatus = function(status){
+    removeAllToDoElement();
+    drawToDoObjectsByStatus(status);
+  }
+
   $("#all").on("click",drawAllToDoList);
 
-  //denote active
+  //show active toDo
   $("#active").on("click", function(){
     drawToDoListByStatus("active");
   });
 
-  //denote completed
+  //show completed toDo
   $("#completed").on("click", function(){
     drawToDoListByStatus("completed");
   });
