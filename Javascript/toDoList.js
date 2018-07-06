@@ -43,6 +43,10 @@ window.onload = function(){
     return false;
   }
 
+  var updateFooterInfo = function(){
+    setActiveCountText();
+    setClearCompletedBtn();
+  }
   var addNewToDo = function(event){
     if(event.keyCode === 13){
       var text = getInputText();
@@ -51,8 +55,7 @@ window.onload = function(){
       var toDoObject = createToDoObject("active",text);
       var toDoElement = createToDoElement(toDoObject);
       appendToDoElement(toDoElement);
-      setActiveCountText();
-      setClearCompletedBtn();
+      updateFooterInfo();
     }
   }
 
@@ -123,8 +126,7 @@ window.onload = function(){
     var targetToDoElement = getTargetToDoElement(event);
     deleteToDoElement(targetToDoElement);
     deleteToDoObject(targetToDoElement);
-    setActiveCountText();
-    setClearCompletedBtn();
+    updateFooterInfo();
   }
 
   //changeToDoStatus
@@ -144,10 +146,8 @@ window.onload = function(){
     var targetToDoElement = getTargetToDoElement(event);
     var changedToDoObject = changeToDoObjectStatus(targetToDoElement);
     changeToDoElementStatus(targetToDoElement, changedToDoObject);
-    setActiveCountText();
-    setClearCompletedBtn();
+    updateFooterInfo();
   }
-
   var showDeleteBtn = function() {
       $(this).children(".toDo_delete").toggleClass("hover");
   }
@@ -252,8 +252,7 @@ window.onload = function(){
     var toggleStatus = event.currentTarget.className;
     (toggleStatus === "status_toggle")? setAllStatus("completed") : setAllStatus("active");
     event.currentTarget.classList.toggle("status_toggle");
-    setActiveCountText();
-    setClearCompletedBtn();
+    updateFooterInfo();
   }
 
   $("#toggle-all").on("click", toggleAll);
@@ -290,5 +289,20 @@ window.onload = function(){
     var clearCompletedBtn = document.getElementById("clear_completed");
     clearCompletedBtn.className = "clearCompletedBtn";
     if(getActiveCount() < toDoArr.length) clearCompletedBtn.classList.toggle("clearCompletedBtn");
+  }
+
+  //clear completed toDo
+  $("#clear_completed").on("click", function(){
+    deleteCompletedToDoObject();
+    drawAllToDoList();
+    setClearCompletedBtn();
+  });
+
+  var deleteCompletedToDoObject = function(){
+    for(var index in toDoArr){
+      if(toDoArr[index].status === "active") continue;
+      delete toDoArr[index];
+    }
+    toDoArr = toDoArr.filter(value => value !== undefined);
   }
 }
