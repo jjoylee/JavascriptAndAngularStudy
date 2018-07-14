@@ -16,7 +16,7 @@
     </div>
     <section id="toDoApp">
       <header id="header">
-          <div id="toggle-all" class="status_toggle">
+          <div id="toggle-all" class="{{toggleAllStyle}}" ng-click = "toggleAll()">
             <i class="fas fa-chevron-down"></i>
           </div>
           <div id="input_div">
@@ -26,8 +26,17 @@
       </header>
       <section id="main">
         <div id="toDoList" style="border-top:1px solid #E6E6E6">
-          <div class="toDo" ng-repeat="item in todo.items">
-          </tr>
+          <div class="toDo" ng-repeat="item in toDo" data-id = {{item.id}} ng-mouseenter="hover = true" ng-mouseleave="hover = false">
+            <div ng-class = "checkDivStyle(item.done)" ng-click = "toggleDone(item.id)">
+              <i ng-class = "checkStyle(item.done)"></i>
+            </div>
+            <div ng-class= "textDivStyle(item.done)">
+              {{item.text}}
+            </div>
+            <div class="toDo_delete" ng-class="{hover : hover}" ng-click = "deleteToDo(item.id)">
+              <i class="fas fa-times"></i>
+            </div>
+          </div>
         </div>
       </section>
       <footer>

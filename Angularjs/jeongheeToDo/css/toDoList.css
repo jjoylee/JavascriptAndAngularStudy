@@ -71,16 +71,13 @@ div.toDo{
   width: 80%;
 }
 
-.toDo_active{
+.toDo_check{
   margin: auto;
   text-align: center;
   width: 10%;
 }
 
-.toDo_completed{
-  margin: auto;
-  text-align: center;
-  width: 10%;
+.done{
   color: green;
 }
 
@@ -91,7 +88,7 @@ div.toDo{
   color: white;
 }
 
-.completed{
+.doneText{
   text-decoration: line-through;
   color: grey;
 }
@@ -100,7 +97,7 @@ div.toDo{
   color:black;
 }
 
-.status_toggle{
+.toggleAll{
   color:grey;
 }
 
