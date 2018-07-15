@@ -27,30 +27,30 @@
       <section id="main">
         <div id="toDoList" style="border-top:1px solid #E6E6E6">
           <div class="toDo" ng-repeat="item in toDo" data-id = {{item.id}}>
-            <div ng-class = "checkDivStyle(item.done)" ng-click = "toggleDone(item.id)">
+            <div ng-class = "checkDivStyle(item.done)" ng-click = "toggleDone(item.id)" ng-model="item.done">
               <i ng-class = "checkStyle(item.done)"></i>
             </div>
-            <div ng-class= "textDivStyle(item.done)" ng-if="!item.edit" ng-dblclick = "editToDo(item.id)"
-            ng-mouseenter="hover = true" ng-mouseleave="hover = false">
+            <div ng-class= "textDivStyle(item.done)" ng-mouseenter="hover = true" ng-mouseleave="hover = false" ng-hide="item.edit" ng-dblclick = "editToDo(item.id)" >
               {{item.text}}
             </div>
-            <div ng-class= "textDivStyle(item.done)" ng-if="item.edit">
+            <div ng-class= "textDivStyle(item.done)" ng-hide="!item.edit">
               <input type="text" value="{{item.text}}" ng-blur = "editToDo(item.id)" ng-model="item.text"/>
             </div>
-            <div class="toDo_delete" ng-class="{ hover : hover }" ng-click = "deleteToDo(item.id)">
+            <div class="toDo_delete" ng-class="{hover : hover}" ng-click = "deleteToDo(item.id)">
               <i class="fas fa-times"></i>
             </div>
           </div>
         </div>
       </section>
       <footer>
-        <div id = "count" style="width:100px; font-size:15px;">
+        <div class="count" ng-hide="getActiveCount() == 0">
+          {{getActiveCount()}} items left
         </div>
         <div class="buttons">
-          <button id="all">All</button>
-          <button id="active">Active</button>
-          <button id="completed">Completed</button>
-          <button id="clear_completed" class="clearCompletedBtn">Clear completed</button>
+          <button>All</button>
+          <button>Active</button>
+          <button>Completed</button>
+          <button ng-show="doneToDoExist()" ng-click>Clear completed</button>
         <div>
       </footer>
     </section>
