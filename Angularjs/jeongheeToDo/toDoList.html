@@ -26,7 +26,7 @@
       </header>
       <section id="main">
         <div id="toDoList" style="border-top:1px solid #E6E6E6">
-          <div class="toDo" ng-repeat="item in toDo" data-id = {{item.id}}>
+          <div class="toDo" ng-repeat="item in toDo | filter : {done : showCondition}" data-id = {{item.id}}>
             <div ng-class = "checkDivStyle(item.done)" ng-click = "toggleDone(item.id)" ng-model="item.done">
               <i ng-class = "checkStyle(item.done)"></i>
             </div>
@@ -47,10 +47,10 @@
           {{getActiveCount()}} items left
         </div>
         <div class="buttons">
-          <button>All</button>
-          <button>Active</button>
-          <button>Completed</button>
-          <button ng-show="doneToDoExist()" ng-click>Clear completed</button>
+          <button ng-click = "changeShowCondition()">All</button>
+          <button ng-click = "changeShowCondition(false)">Active</button>
+          <button ng-click = "changeShowCondition(true)">Completed</button>
+          <button ng-show="doneToDoExist()" ng-click = "clearCompleted()">Clear completed</button>
         <div>
       </footer>
     </section>

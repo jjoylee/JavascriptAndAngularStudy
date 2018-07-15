@@ -17,6 +17,8 @@ var toDoApp = angular.module("toDoApp",[]);
 toDoApp.controller("ToDoCtrl", function($scope){
   $scope.toDo = [];
 
+  $scope.showCondition = "";
+
   $scope.addNewToDo = function(event, todoText){
     if(event.keyCode !== 13) return;
     $scope.toDo.push({
@@ -89,4 +91,12 @@ toDoApp.controller("ToDoCtrl", function($scope){
   $scope.doneToDoExist = function(){
     return $scope.toDo.length !== $scope.getActiveCount();
   };
+
+  $scope.clearCompleted = function(){
+    $scope.toDo = $scope.toDo.filter( todo => todo.done === false);
+  };
+
+  $scope.changeShowCondition = function(condition){
+    $scope.showCondition = condition;
+  }
 });
