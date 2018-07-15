@@ -19,12 +19,21 @@ toDoApp.controller("ToDoCtrl", function($scope){
 
   $scope.addNewToDo = function(event, todoText){
     if(event.keyCode !== 13) return;
+
     $scope.toDo.push({
       id : uuidGenerator(),
       text : todoText,
       done : false,
+      edit : false
     });
     event.currentTarget.value = "";
+
+    function uuidGenerator(){
+      function s4() {
+        return ((1 + Math.random()) *  0x10000 | 0).toString(16).substring(1);
+      }
+      return s4() + s4() + '-' + s4() + '-' + s4() + '-' + s4() + '-' + s4() + s4() + s4();
+    };
   };
 
   $scope.deleteToDo = function(id){
@@ -35,8 +44,7 @@ toDoApp.controller("ToDoCtrl", function($scope){
 
   var getToDoIdxById = function(id){
     for(var idx in $scope.toDo){
-      if($scope.toDo[idx].id === id)
-        return idx;
+      if($scope.toDo[idx].id === id) return idx;
     }
   };
 
@@ -63,18 +71,16 @@ toDoApp.controller("ToDoCtrl", function($scope){
     $scope.toggleAllStyle = ($scope.toggleAllStyle === "toggleAll") ? "" : "toggleAll";
     var done = ($scope.toggleAllStyle === "toggleAll") ? false : true;
     setAllToDoDone(done);
+
+    function setAllToDoDone(done){
+      for(var idx in $scope.toDo){
+        $scope.toDo[idx].done = done;
+      }
+    };
   };
 
-  var setAllToDoDone = function(done){
-    for(var idx in $scope.toDo){
-      $scope.toDo[idx].done = done;
-    }
-  }
-
-  var uuidGenerator = function(){
-    function s4() {
-      return ((1 + Math.random()) *  0x10000 | 0).toString(16).substring(1);
-    }
-    return s4() + s4() + '-' + s4() + '-' + s4() + '-' + s4() + '-' + s4() + s4() + s4();
+  $scope.editToDo = function(id){
+    var idx = getToDoIdxById(id);
+    if(idx) $scope.toDo[idx].edit = !$scope.toDo[idx].edit;
   };
 });

@@ -26,14 +26,18 @@
       </header>
       <section id="main">
         <div id="toDoList" style="border-top:1px solid #E6E6E6">
-          <div class="toDo" ng-repeat="item in toDo" data-id = {{item.id}} ng-mouseenter="hover = true" ng-mouseleave="hover = false">
+          <div class="toDo" ng-repeat="item in toDo" data-id = {{item.id}}>
             <div ng-class = "checkDivStyle(item.done)" ng-click = "toggleDone(item.id)">
               <i ng-class = "checkStyle(item.done)"></i>
             </div>
-            <div ng-class= "textDivStyle(item.done)">
+            <div ng-class= "textDivStyle(item.done)" ng-if="!item.edit" ng-dblclick = "editToDo(item.id)"
+            ng-mouseenter="hover = true" ng-mouseleave="hover = false">
               {{item.text}}
             </div>
-            <div class="toDo_delete" ng-class="{hover : hover}" ng-click = "deleteToDo(item.id)">
+            <div ng-class= "textDivStyle(item.done)" ng-if="item.edit">
+              <input type="text" value="{{item.text}}" ng-blur = "editToDo(item.id)" ng-model="item.text"/>
+            </div>
+            <div class="toDo_delete" ng-class="{ hover : hover }" ng-click = "deleteToDo(item.id)">
               <i class="fas fa-times"></i>
             </div>
           </div>
