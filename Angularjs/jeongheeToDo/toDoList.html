@@ -30,10 +30,11 @@
             <div ng-class = "checkDivStyle(item.done)" ng-click = "toggleDone(item.id)" ng-model="item.done">
               <i ng-class = "checkStyle(item.done)"></i>
             </div>
-            <div ng-class= "textDivStyle(item.done)" ng-mouseenter="hover = true" ng-mouseleave="hover = false" ng-hide="item.edit" ng-dblclick = "editToDo(item.id)" >
+            <div ng-class= "textDivStyle(item.done)" ng-mouseenter="hover = true" ng-mouseleave="hover = false"
+            ng-hide="item.inEditProcess" ng-dblclick = "editToDo(item.id)" >
               {{item.text}}
             </div>
-            <div ng-class= "textDivStyle(item.done)" ng-hide="!item.edit">
+            <div ng-class= "textDivStyle(item.done)" ng-hide="!item.inEditProcess">
               <input type="text" value="{{item.text}}" ng-blur = "editToDo(item.id)" ng-model="item.text"/>
             </div>
             <div class="toDo_delete" ng-class="{hover : hover}" ng-click = "deleteToDo(item.id)">

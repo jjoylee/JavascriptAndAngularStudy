@@ -25,7 +25,7 @@ toDoApp.controller("ToDoCtrl", function($scope){
       id : uuidGenerator(),
       text : todoText,
       done : false,
-      edit : false
+      inEditProcess : false
     });
     event.currentTarget.value = "";
 
@@ -81,7 +81,7 @@ toDoApp.controller("ToDoCtrl", function($scope){
 
   $scope.editToDo = function(id){
     var idx = getToDoIdxById(id);
-    if(idx) $scope.toDo[idx].edit = !$scope.toDo[idx].edit;
+    if(idx) $scope.toDo[idx].inEditProcess = !$scope.toDo[idx].inEditProcess;
   };
 
   $scope.getActiveCount = function(){
