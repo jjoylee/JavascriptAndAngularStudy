@@ -43,7 +43,6 @@ toDoApp.controller("ToDoCtrl", function($scope){
   $scope.deleteToDo = function(id){
     var idx = getToDoIdxById(id);
     if(idx) delete $scope.toDo[idx];
-    $scope.toDo = $scope.toDo.filter( todo => todo !== undefined);
   };
 
   var getToDoIdxById = function(id){
