@@ -19,15 +19,18 @@ toDoApp.controller("ToDoCtrl", function($scope){
 
   $scope.showCondition = "";
 
-  $scope.addNewToDo = function(event, todoText){
+  $scope.inputVal = "";
+
+  $scope.addNewToDo = function(event){
     if(event.keyCode !== 13) return;
+    if($scope.inputVal.replace(/^\s+/g, '').length === 0) return;
     $scope.toDo.push({
       id : uuidGenerator(),
-      text : todoText,
+      text : $scope.inputVal,
       done : false,
       inEditProcess : false
     });
-    event.currentTarget.value = "";
+    $scope.inputVal = "";
 
     function uuidGenerator(){
       function s4() {

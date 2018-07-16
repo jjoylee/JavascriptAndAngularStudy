@@ -21,20 +21,20 @@
           </div>
           <div id="input_div">
             <input type="text" id="toDo_input" placeholder="What needs to be done?" autofocus
-            ng-keypress="addNewToDo($event,todoText)" ng-model="todoText">
+            ng-keypress="addNewToDo($event)" ng-model="inputVal">
           </div>
       </header>
       <section id="main">
         <div id="toDoList" style="border-top:1px solid #E6E6E6">
-          <div class="toDo" ng-repeat="item in toDo | filter : {done : showCondition}" data-id = {{item.id}}>
+          <div class="toDo" ng-repeat="item in toDo | filter : {done : showCondition}"
+            ng-mouseenter="hover = true" ng-mouseleave="hover = false">
             <div ng-class = "checkDivStyle(item.done)" ng-click = "toggleDone(item.id)" ng-model="item.done">
               <i ng-class = "checkStyle(item.done)"></i>
             </div>
-            <div ng-class= "textDivStyle(item.done)" ng-mouseenter="hover = true" ng-mouseleave="hover = false"
-            ng-hide="item.inEditProcess" ng-dblclick = "editToDo(item.id)" >
+            <div ng-class= "textDivStyle(item.done)" ng-hide="item.inEditProcess" ng-dblclick = "editToDo(item.id)" >
               {{item.text}}
             </div>
-            <div ng-class= "textDivStyle(item.done)" ng-hide="!item.inEditProcess">
+            <div ng-class= "textDivStyle(item.done)" ng-hide="!item.inEditProcess" ng-mouseenter="hover = false">
               <input type="text" value="{{item.text}}" ng-blur = "editToDo(item.id)" ng-model="item.text"/>
             </div>
             <div class="toDo_delete" ng-class="{hover : hover}" ng-click = "deleteToDo(item.id)">
