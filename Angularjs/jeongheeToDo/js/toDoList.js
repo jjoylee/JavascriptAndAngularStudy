@@ -56,23 +56,23 @@ toDoApp.controller("ToDoCtrl", function($scope){
     if(idx) $scope.toDo[idx].done = !$scope.toDo[idx].done;
   };
 
-  $scope.checkDivStyle = function(doneStatus){
-    return (doneStatus === true)? "toDo_check done" : "toDo_check";
+  $scope.checkDivStyle = function(done){
+    return (!done)? "toDo_check" : "toDo_check done";
   };
 
-  $scope.checkStyle = function(doneStatus){
-    return (doneStatus === true)? "far fa-check-circle" : "far fa-circle";
+  $scope.checkStyle = function(done){
+    return (!done)? "far fa-circle" : "far fa-check-circle";
   };
 
-  $scope.textDivStyle = function(doneStatus){
-    return (doneStatus === true) ? "toDo_text doneText" : "toDo_text";
+  $scope.textDivStyle = function(done){
+    return (!done)? "toDo_text" : "toDo_text doneText";
   };
 
   $scope.toggleAllStyle = "toggleAll";
 
   $scope.toggleAll = function(){
-    $scope.toggleAllStyle = ($scope.toggleAllStyle === "toggleAll") ? "" : "toggleAll";
-    var done = ($scope.toggleAllStyle === "toggleAll") ? false : true;
+    $scope.toggleAllStyle = (!$scope.toggleAllStyle) ? "toggleAll" : "";
+    var done = (!$scope.toggleAllStyle) ? true : false;
     setAllToDoDone(done);
 
     function setAllToDoDone(done){
