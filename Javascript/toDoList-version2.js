@@ -266,6 +266,7 @@ window.onload = function(){
     drawAllToDoObjects();
   };
 
+  //status가 parameter에 들어온 값과 일치하는 toDoObject를 찾으면 toDoElement 생성후 append
   var drawToDoObjectsByStatus = function(status){
     for(var index in toDoArr){
       if(status !== toDoArr[index].status) continue;
@@ -273,7 +274,7 @@ window.onload = function(){
       document.getElementById("toDoList").appendChild(toDoObject);
     }
   };
-  
+
   // toDoList 내용 지우기
   var removeAllToDoElement = function(){
     $("#toDoList").empty();
