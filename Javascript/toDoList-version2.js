@@ -27,7 +27,7 @@ window.onload = function(){
 
   //add To Do
   var addNewToDo = function(event){
-    if(event.keyCode !== 13) return;
+    if(event.keyCode !== 13) return; // enter를 누를 시 toDo 등록
     var text = getInputText();
     if(!text) return;
     addToDo(text);
@@ -35,11 +35,12 @@ window.onload = function(){
   };
 
   var addToDo = function(text){
-    var toDoObject = createToDoObject("active",text);
-    var toDoElement = createToDoElement(toDoObject);
-    appendToDoElement(toDoElement);
+    var toDoObject = createToDoObject("active",text); // toDoObject 생성
+    var toDoElement = createToDoElement(toDoObject); //toDo를 표시하는 Element생성
+    appendToDoElement(toDoElement); // Element붙이기
   };
 
+  //inputBox에서 text 입력받기
   var getInputText = function(){
     var inputText = document.getElementById('toDo_input').value;
     if(inputText.replace(/^\s+/g, '').length === 0) return;
@@ -144,64 +145,56 @@ window.onload = function(){
     return toDoObject;
   };
 
-  var changeToDoElementStatus = function(targetToDoElement, changedToDoObject){
+  // 변경된 todoObject를 바탕으로 새로운 element생성 후 targetToDoElement와 replace
+  var changeToDoElement = function(targetToDoElement, changedToDoObject){
     var changedToDoElement = createToDoElement(changedToDoObject);
-     document.getElementById("toDoList").replaceChild(changedToDoElement,targetToDoElement);
+    document.getElementById("toDoList").replaceChild(changedToDoElement,targetToDoElement);
   };
 
+  // click event 발생 시 (check, uncheck)
   var changeToDoStatus = function(event){
+    // 이벤트 발생한 toDoElement 가져오기
     var targetToDoElement = getTargetToDoElement(event);
+    // todoObject의 status 변경
     var changedToDoObject = changeToDoObjectStatus(targetToDoElement);
-    changeToDoElementStatus(targetToDoElement, changedToDoObject);
-    updateFooterInfo();
+    changeToDoElement(targetToDoElement, changedToDoObject);
+    updateFooterInfo(); // active toDo count update, clearCompletedBtn 보여주거나 숨기기
   };
 
   var showDeleteBtn = function() {
     $(this).children(".toDo_delete").toggleClass("hover");
   };
 
-  //edit
+  //edit - dblclick시
   var editToDo = function(event){
-    var targetToDoElement = getTargetToDoElement(event);
-    var toDoObject = getToDoObjectByElement(targetToDoElement);
+    var targetToDoElement = getTargetToDoElement(event); //event가 발생한 toDoElement가져오기
+    var toDoObject = getToDoObjectByElement(targetToDoElement); //event가 발생한 toDoObject가져오기
     startEdit(targetToDoElement);
-    endEdit(targetToDoElement,toDoObject);
+    endEdit(targetToDoElement,toDoObject); // focusout 시 수정 완료
   };
 
   var endEdit = function(toDoElement,toDoObject){
     $(".toDo_text > input").on("focusout", function(){
-      editToDoText(toDoElement,toDoObject);
+      editToDoText(toDoElement,toDoObject); // input tag를 변경한 text로 바꿔 수정 완료
     });
   };
 
   var startEdit = function(toDoElement){
-    replaceTextToInput(toDoElement);
-    offEvents(toDoElement);
+    replaceTextToInput(toDoElement); // text를 input tag로 바꾸기
+    offEvents(toDoElement); // 삭제 버튼을 보여주기 위한 이벤트 off
   };
 
   var editToDoText = function(toDoElement,toDoObject){
-    var text = $(toDoElement).find("input").val();
-    if(isToDoExist(text)) return;
-    editToDoElementText(toDoElement,text);
-    toDoObject.text = text;
-    onEvents(toDoElement);
-  };
-
-  var editToDoElementText = function(toDoElement, text){
-    var $toDoText = $(toDoElement).children(".toDo_text");
-    $toDoText.remove("input");
-    $toDoText.text(text);
+    var text = $(toDoElement).find("input").val(); // input value 가져오기
+    if(isToDoExist(text)) return; // 이미 존재하면 수정 x
+    toDoObject.text = text; // todoObject의 text 바꾸기
+    changeToDoElement(toDoElement,toDoObject);
   };
 
   var offEvents = function(toDoElement){
     $(toDoElement).off("mouseenter mouseleave");
     $(toDoElement).find(".toDo_delete").removeClass("hover");
     $(toDoElement).find(".toDo_delete").off("click");
-  };
-
-  var onEvents = function(toDoElement){
-    $(toDoElement).on("mouseenter mouseleave", showDeleteBtn);
-    $(toDoElement).find(".toDo_delete").on("click", deleteToDo);
   };
 
   var replaceTextToInput = function(toDoElement){
@@ -220,35 +213,20 @@ window.onload = function(){
     return input;
   };
 
-  //toggle all
+  //toggle All
+  // completed 또는 active로 toDoObject type로 다 set
   var setAllObjectStatus = function(type){
     for(var index in toDoArr){
       toDoArr[index].status = type;
     }
   };
 
-  var removeAllToDoElement = function(){
-    $("#toDoList").empty();
-  };
-
+  // 모든 toDoElement를 새로 만든뒤 다 append
   var drawAllToDoObjects = function(){
     for(var index in toDoArr){
       var toDoObject = createToDoElement(toDoArr[index]);
       document.getElementById("toDoList").appendChild(toDoObject);
     }
-  };
-
-  var drawToDoObjectsByStatus = function(status){
-    for(var index in toDoArr){
-      if(status !== toDoArr[index].status) continue;
-      var toDoObject = createToDoElement(toDoArr[index]);
-      document.getElementById("toDoList").appendChild(toDoObject);
-    }
-  };
-
-  var drawAllToDoList = function(){
-    removeAllToDoElement();
-    drawAllToDoObjects();
   };
 
   var setAllStatus = function(type){
@@ -278,6 +256,29 @@ window.onload = function(){
     return count;
   };
 
+  //show completed toDo
+  $("#completed").on("click", function(){
+    drawToDoListByStatus("completed");
+  });
+
+  var drawAllToDoList = function(){
+    removeAllToDoElement();
+    drawAllToDoObjects();
+  };
+
+  var drawToDoObjectsByStatus = function(status){
+    for(var index in toDoArr){
+      if(status !== toDoArr[index].status) continue;
+      var toDoObject = createToDoElement(toDoArr[index]);
+      document.getElementById("toDoList").appendChild(toDoObject);
+    }
+  };
+  
+  // toDoList 내용 지우기
+  var removeAllToDoElement = function(){
+    $("#toDoList").empty();
+  };
+
   //show all toDo
   var drawToDoListByStatus = function(status){
     removeAllToDoElement();
@@ -289,11 +290,6 @@ window.onload = function(){
   //show active toDo
   $("#active").on("click", function(){
     drawToDoListByStatus("active");
-  });
-
-  //show completed toDo
-  $("#completed").on("click", function(){
-    drawToDoListByStatus("completed");
   });
 
   //set ClearCompleted Button
