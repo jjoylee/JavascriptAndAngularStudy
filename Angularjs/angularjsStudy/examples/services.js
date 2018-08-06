@@ -38,12 +38,12 @@ angular.module("customServices", [])
           return debug;
         }
       },
-      $get : function(){
+      $get : function($log){
         return {
           messageCount : 0,
           log : function(msg){
             if(debug){
-              console.log("(Log" + (counter ? " + " + this.messageCount++ + ") " : ") ")
+              $log.log("(Log" + (counter ? " + " + this.messageCount++ + ") " : ") ")
                + msg );
             }
           }

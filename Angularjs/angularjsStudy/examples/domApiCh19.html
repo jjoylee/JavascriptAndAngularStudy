@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html ng-app = "exampleApp">
+<head>
+  <title>DOM API Services</title>
+  <link rel="stylesheet" href="bootstrap.css">
+  <link rel="stylesheet" href="bootstrap-theme.css">
+  <script src="angular.js"></script>
+  <script>
+    angular.module("exampleApp", [])
+    .config(function($anchorScrollProvider){
+      // if(window.history && history.pushState){
+      //   $locationProvider.html5Mode({
+      //     enabled: true,
+      //     requireBase: false
+      //   });
+      // }
+      $anchorScrollProvider.disableAutoScrolling();
+    })
+    .controller("defaultCtrl", function($scope,$anchorScroll,$location,$interval,$window,$document){
+      // $document.find("button").on("click", function(event){
+      //   $window.alert(event.target.innerText);
+      // });
+      // $interval(function(){
+      //   $scope.time = new Date().toTimeString();
+      // }, 2000);
+      // $scope.$on("$locationChangeSuccess", function(event, newUrl){
+      //   $scope.url = newUrl;
+      // });
+      // $scope.setUrl = function(component){
+      //   switch (component) {
+      //     case "reset":
+      //       $location.path("");
+      //       $location.hash("");
+      //       $location.search("");
+      //       break;
+      //     case "path":
+      //       $location.path("/cities/london");
+      //       break;
+      //     case "hash":
+      //       $location.hash("north");
+      //       break;
+      //     case "search":
+      //       $location.search("select","hotels");
+      //       break;
+      //     case "url":
+      //       $location.url("/cities/london?select=hotels#north");
+      //       break;
+      //   }
+      // }
+      $scope.itemCount = 50;
+      $scope.items = [];
+
+      for(var i = 0 ; i < $scope.itemCount; i++){
+        $scope.items[i] = "Item " + i;
+      }
+
+      $scope.show = function(id){
+        $location.hash(id);
+        if(id == "bottom"){
+          $anchorScroll();
+        }
+      }
+    });
+  </script>
+</head>
+<body ng-controller="defaultCtrl" class="well">
+  <!-- <button class="btn btn-primary">
+    Click Me
+  </button> -->
+  <!-- <div class="panel panel-default">
+    <h4 class="panel-heading">Time</h4>
+    <div class="panel-body">
+      The time is : {{time}}
+    </div>
+  </div> -->
+  <div class="panel panle-default">
+    <h4 class="panel-heading">URL</h4>
+    <div class="panel-body">
+      <!-- <p>The URL is : {{url}}</p>
+      <div class="btn-group">
+        <button class="btn btn-primary" ng-click="setUrl('reset')">
+          Reset
+        </button>
+        <button class="btn btn-primary" ng-click="setUrl('path')">
+          Path
+        </button>
+        <button class="btn btn-primary" ng-click="setUrl('hash')">
+          Hash
+        </button>
+        <button class="btn btn-primary" ng-click="setUrl('search')">
+          Search
+        </button>
+        <button class="btn btn-primary" ng-click="setUrl('url')">
+          URL
+        </button>
+      </div> -->
+      <p id="top">This is the top</p>
+      <button class="btn btn-primary" ng-click="show('bottom')">
+        Go to Bottom
+      </button>
+      <ul>
+        <li ng-repeat = "item in items">{{item}}</li>
+      </ul>
+      <p id="bottom">This is the bottom</p>
+      <button class="btn btn-primary" ng-click="show('top')">
+        Go to Top
+      </button>
+    </div>
+  </div>
+</body>
+</html>
